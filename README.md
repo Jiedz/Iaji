@@ -1,0 +1,2 @@
+# Iaji
+Python package
