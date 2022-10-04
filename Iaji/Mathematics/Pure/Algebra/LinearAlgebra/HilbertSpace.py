@@ -145,7 +145,8 @@ class HilbertSpace:
         expression = sympy.zeros(*(self.dimension, 1))
         expression[n] = 1
         vector.symbolic.expression = expression
-        vector.numeric.value = vector.symbolic.expression_lambda()      
+        vector.numeric.value = numpy.matrix(numpy.zeros((self.dimension, 1)))   
+        vector.numeric.value[n] = 1
         return vector
     # ---------------------------------------------------------------
     def __str__(self):
