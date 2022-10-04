@@ -293,7 +293,7 @@ height:30px;
 padding:2px;
 color:black;
 font-family:;
-font-size:13pt;
+font-size:13pt;z`
 }
 """
         self.style_sheets["slider"] = """
