@@ -51,7 +51,7 @@ class Pulse(Parameter):
                 self.window_shape *= sympy.sympify(kwargs["window_shape"])
             self.symbolic.expression = self.peak_shape*self.window_shape
     #----------------------
-    def set_shape_standard(self, start, stop, peak_type:str=None, window_type:str=None, **params):
+    def set_shape_standard(self, start, stop, peak_type:str=None, window_type:str="rect", **params):
         if peak_type is not None:
             assert peak_type in PEAK_TYPES, \
                 "%s is not a supported peak type: \n %s"%(peak_type, PEAK_TYPES)
@@ -59,17 +59,23 @@ class Pulse(Parameter):
             assert window_type in WINDOW_TYPES, \
                 "%s is not a supported window type: \n %s"%(window_type, WINDOW_TYPES)
         #self.window_shape = sympy.sympify("heaviside(x+%f, 1)-heaviside(x+%f, 1)"%(stop, start))
-        #Take care of the window types
-        if window_type == "trapz":
+        #Window types
+        if window_type == "rect":
+            x = self.symbolic.expression_symbols[0]
+            self.window_shape = sympy.Piecewise((0, x<=start), \
+                                                 (1, (x>start) & (x<=stop)), \
+                                                     (0, x>stop))
+        elif window_type == "trapz":
             assert "rise" in list(params.keys()) and "fall" in list(params.keys()), \
                 "'trapz' window type requires 'rise' and 'fall' values for the independent variable"
             rise = params["rise"]
             fall = params["fall"]
             x = self.symbolic.expression_symbols[0]
-            self.window_shape = sympy.Piecewise(((x-start)/rise, (x>start) & (x< start+rise)), \
+            self.window_shape = sympy.Piecewise((0, x<=start), \
+                                                ((x-start)/rise, (x>start) & (x< start+rise)), \
                                                  (1, (x>start+rise) & (x<stop-fall)), \
-                                                     (1-(x-(stop-fall))/fall, (x>stop-fall) & (x<stop)))
-            
+                                                     (1-(x-(stop-fall))/fall, (x>stop-fall) & (x<stop)), \
+                                                         (0, x>=stop))
         self.peak_shape = 1
         self.symbolic.expression = self.peak_shape*self.window_shape
            
