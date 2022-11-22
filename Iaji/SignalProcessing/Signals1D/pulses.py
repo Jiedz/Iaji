@@ -72,5 +72,6 @@ class Pulse(Parameter):
             
         self.peak_shape = 1
         self.symbolic.expression = self.peak_shape*self.window_shape
+        #ciao
            
         
