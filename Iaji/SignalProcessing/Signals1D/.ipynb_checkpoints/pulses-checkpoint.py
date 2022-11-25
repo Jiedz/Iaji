@@ -13,7 +13,6 @@ import matplotlib
 from matplotlib import pyplot
 from Iaji.Mathematics.Parameter import Parameter
 import sympy
-sympy.init_printing()
 # In[Global constants]
 PEAK_TYPES = ["flat", "exp"]
 WINDOW_TYPES = ["rect", "trapz", "exp"]
@@ -59,9 +58,10 @@ class Pulse(Parameter):
         if window_type is not None:
             assert window_type in WINDOW_TYPES, \
                 "%s is not a supported window type: \n %s"%(window_type, WINDOW_TYPES)
+        #self.window_shape = sympy.sympify("heaviside(x+%f, 1)-heaviside(x+%f, 1)"%(stop, start))
         #Window types
-        x = self.symbolic.expression_symbols[0]
-        if window_type == "rect":     
+        if window_type == "rect":
+            x = self.symbolic.expression_symbols[0]
             self.window_shape = sympy.Piecewise((0, x<=start), \
                                                  (1, (x>start) & (x<=stop)), \
                                                      (0, x>stop))
@@ -70,23 +70,11 @@ class Pulse(Parameter):
                 "'trapz' window type requires 'rise' and 'fall' values for the independent variable"
             rise = params["rise"]
             fall = params["fall"]
+            x = self.symbolic.expression_symbols[0]
             self.window_shape = sympy.Piecewise((0, x<=start), \
-                                                ((x-start)/rise, (x>start) & (x<=start+rise)), \
-                                                 (1, (x>start+rise) & (x<=stop-fall)), \
+                                                ((x-start)/rise, (x>start) & (x< start+rise)), \
+                                                 (1, (x>start+rise) & (x<stop-fall)), \
                                                      (1-(x-(stop-fall))/fall, (x>stop-fall) & (x<stop)), \
-                                                         (0, x>=stop))
-        elif window_type == "exp":
-            assert "rise" in list(params.keys()) and "fall" in list(params.keys()), \
-                "'exp' window type requires 'rise' and 'fall' values for the independent variable"
-            rise = params["rise"]
-            fall = params["fall"]
-            epsilon = 1e-6
-            f = (epsilon)**((start+rise)/rise) * sympy.exp(-1/rise*sympy.log(epsilon)*x)
-            g = (epsilon)**(-(stop-fall)/fall) * sympy.exp(1/fall*sympy.log(epsilon)*x)
-            self.window_shape = sympy.Piecewise((0, x<=start), \
-                                                (f, (x>start) & (x<= start+rise)), \
-                                                 (1, (x>start+rise) & (x<=stop-fall)), \
-                                                     (g, (x>stop-fall) & (x<stop)), \
                                                          (0, x>=stop))
         self.peak_shape = 1
         self.symbolic.expression = self.peak_shape*self.window_shape
