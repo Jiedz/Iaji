@@ -9,7 +9,6 @@ This module defines a pulse and pulse train, with their related properties
 """
 # In[imports]
 import numpy
-import matplotlib
 from matplotlib import pyplot
 from Iaji.Mathematics.Parameter import Parameter
 import sympy
