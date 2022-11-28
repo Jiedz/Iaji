@@ -21,14 +21,6 @@ class Pulse(Parameter):
     def __init__(self):
         super().__init__()    
     #-----------------------
-    def plot(self, x1, x2, n_points:int=1000, axis=None, color="tab:purple"):
-        if axis is None:
-            axis = pyplot.figure().add_subplot(111)
-        x = numpy.linspace(x1, x2, n_points)
-        axis.plot(x, self.symbolic.expression_lambda(x), marker=".", color=color)
-        axis.grid(True)
-        return axis
-    #----------------------
     def set_shape_free(self, shape:str=None, **kwargs):
         '''
         INPUTS
@@ -88,6 +80,32 @@ class Pulse(Parameter):
                                                      (g, (x>stop-fall) & (x<stop)), \
                                                          (0, x>=stop))
         self.peak_shape = 1
+        #Peak type
+        if peak_type == "exp":
+            assert "initial_level" in list(params.keys()) and "final_level" in list(params.keys()), \
+                "'exp' peak type requires 'initial_level' and 'final_level' values for the dependent variable"
+            initial_level = params["initial_level"]
+            final_level = params["final_level"]
+            if window_type == "rect":
+                rise = fall = 0
+            a = 1/(stop-start-(fall+rise))*sympy.log(final_level/initial_level)
+            b = initial_level*sympy.exp(-a*(start+rise))
+            p = b*sympy.exp(a*x)
+            self.peak_shape *= sympy.Piecewise((initial_level, x<=start+rise), \
+                                                 (p, (x>start+rise) & (x<=stop-fall)), \
+                                                     (final_level, x>stop-fall))
         self.symbolic.expression = self.peak_shape*self.window_shape
-           
+    #----------------------
+    def plot(self, x1, x2, n_points:int=1000, axis=None, color="tab:purple"):
+        if axis is None:
+            axis = pyplot.figure().add_subplot(111)
+        x = numpy.linspace(x1, x2, n_points)
+        axis.plot(x, self.symbolic.expression_lambda(x), marker=".", color=color)
+        axis.grid(True)
+        return axis
+    #----------------------
+    def sample(self, x1, x2, n_points:int=1000):
+        x = numpy.linspace(x1, x2, n_points)
+        y = self.symbolic.expression_lambda(x)
+        return x, y   
         
