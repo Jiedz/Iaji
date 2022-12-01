@@ -96,15 +96,17 @@ class Pulse(Parameter):
                                                      (final_level, x>stop-fall))
         self.symbolic.expression = self.peak_shape*self.window_shape
     #----------------------
-    def plot(self, x1, x2, n_points:int=1000, axis=None, color="tab:purple"):
+    def plot(self, x1, x2, n_points:int=1000, fs:float=None, axis=None, color="tab:purple"):
         if axis is None:
             axis = pyplot.figure().add_subplot(111)
-        x = numpy.linspace(x1, x2, n_points)
-        axis.plot(x, self.symbolic.expression_lambda(x), marker=".", color=color)
+        axis.plot(*self.sample(x1, x2, n_points=n_points, fs=fs), marker=".", color=color)
         axis.grid(True)
         return axis
     #----------------------
-    def sample(self, x1, x2, n_points:int=1000):
+    def sample(self, x1, x2, n_points:int=1000, fs:float=None):
+        if fs is not None:
+            dt = 1/fs
+            n_points = int(numpy.floor((x2-x1)/dt))
         x = numpy.linspace(x1, x2, n_points)
         y = self.symbolic.expression_lambda(x)
         return x, y   

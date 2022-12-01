@@ -13,5 +13,4 @@ from Iaji.SignalProcessing.Signals1D.pulses import Pulse
 p = Pulse()
 p.set_shape_standard(start=-200e-9, stop=200e-9, window_type="exp", peak_type="exp",\
                      rise=20e-9, fall=40e-9, initial_level=0.1, final_level=0.8)
-axis = p.plot(-500e-9, 500e-9, 1000)
-axis.plot(*p.sample(-800e-9, 800e-9, 10000))
+axis = p.plot(-500e-9, 500e-9, fs=1e9)
