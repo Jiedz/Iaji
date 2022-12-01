@@ -7,9 +7,10 @@ Created on Thu Dec  1 19:31:22 2022
 
 This module defines a generic interface for an electronic oscilloscope
 """
-# imports
+# In[imports]
 from signalslot import Signal
-import numpy
+#import numpy
+import warnings
 # In[Oscilloscope]
 class Oscilloscope:
     def __init__(self, address, name:str="Oscilloscope", channel_names:list[str] = [], connect=True):
@@ -29,34 +30,53 @@ class Oscilloscope:
                 return
     #------------ 
     def connect(self):
-        raise NotImplementedError
+        '''
+        Connects the host to the oscilloscope and defines the related software instrument
+        '''
+        warnings.warn("Not fully implemented")
     #------------
     def acquire(self, channel_numbers:list[str]=None, channel_names:list[int]=None):
+        '''
+        Starts and finishes a single acquisition from the selected channels, enabling
+        them if they are not
+        '''
         assert channel_numbers is not None or channel_names is not None, \
             "either 'channel_numbers' or 'channel_names' must be specified"
-        raise NotImplementedError
-    #------------
-    def channel(self, name:str=None, number:int=None):
-        assert name is not None or number is not None, \
-            "either 'name' or 'number' must be specified"
-        if name is not None:
-            return self.channels[numpy.where(self.channel_names==name)]
+        if channel_names is not None:
+            channel_ids = channel_names
+            all_channel_ids = self.channel_names 
         else:
-            return self.channels[number-1]
-        raise NotImplementedError
+            channel_ids = channel_numbers
+            all_channel_ids = range(len(self.channels))
+        #Activate only the selected channels
+        #active_channel_numbers = [j for j in range(len(self.channels)) if self.channel(j+1).is_enabled()]
+        for x in channel_ids:
+            self.channel(x).enable(True)
+        for x in list(set(all_channel_ids)-set(channel_ids)):
+            self.channel(x).enable(False)
+        #Acquire    
+        warnings.warn("Not fully implemented")
+    #------------
+    def channel(self, channel_id):
+        if type(channel_id) == str:
+            return [self.channels[j] for j in range(len(self.channel_names)) if self.channel_names[j]==channel_id][0]
+        else:
+            return self.channels[channel_id-1]
+        warnings.warn("Not fully implemented")
     #------------
     def stop(self):
-        raise NotImplementedError
+        warnings.warn("Not fully implemented")
     #------------
     def wait(self):
-        raise NotImplementedError
+        warnings.warn("Not fully implemented")
 # In[OscilloscopeChannel]
 class OscilloscopeChannel:
     def __init__(self, instrument, channel_number, name="Oscilloscope Channel"):
         self.instrument = instrument
         self.number = int(channel_number)
         self.name = name
-    #------------ 
+        warnings.warn("Not fully implemented")
+    #------------
     def setup_vertical(self, voltage_range, offset):
         """
         Sets the voltage range and the vertical offset for the input channel.
@@ -69,11 +89,11 @@ class OscilloscopeChannel:
         :return:
             the list of command strings being sent to the scope
         """
-        raise NotImplementedError
-
+        warnings.warn("Not fully implemented")
+    #------------
     def get_vertical_setup(self):
-        raise NotImplementedError
-
+        warnings.warn("Not fully implemented")
+    #------------
     def set_vertical_range(self, voltage_range):
         """
         Sets the voltage range for the input channel.
@@ -83,8 +103,8 @@ class OscilloscopeChannel:
             full range of the voltages displayed by the scope for the input channel.
         :return:
         """
-        raise NotImplementedError
-
+        warnings.warn("Not fully implemented")
+    #------------
     def set_vertical_offset(self, offset):
         """
         Sets the vertical offset for the input channel.
@@ -94,11 +114,8 @@ class OscilloscopeChannel:
             vertical offset of the scope for the input channel.
         :return:
         """
-        raise NotImplementedError
-
-    # --------------------------------------------------------------------------------------------------------------
-    # Other
-
+        warnings.warn("Not fully implemented")
+    #------------
     def enable(self, enabled):
         """
         Enables or disables the input channels.
@@ -108,11 +125,11 @@ class OscilloscopeChannel:
             If true, the input "C"+str(self.number)s is displayed.
         :return:
         """
-        raise NotImplementedError
-
+        warnings.warn("Not fully implemented")
+    #------------
     def is_enabled(self):
-        raise NotImplementedError
-        
+        warnings.warn("Not fully implemented")
+    #------------    
     def set_coupling(self, coupling):
         """
         Sets the coupling type of the channel input.
@@ -128,8 +145,8 @@ class OscilloscopeChannel:
         :return:
             the command being sent to the scope
         """
-        raise NotImplementedError
-
+        warnings.warn("Not fully implemented")
+    #------------
     def get_coupling(self):
         """
         Gets the coupling type of the input channel
@@ -137,6 +154,6 @@ class OscilloscopeChannel:
         :param channel: str
         :return:
         """
-        raise NotImplementedError
+        warnings.warn("Not fully implemented")
     
 
