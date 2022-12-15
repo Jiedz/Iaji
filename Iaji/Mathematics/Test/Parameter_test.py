@@ -17,6 +17,7 @@ print(p_scalar)
 p_matrix_symbolic_expression = sympy.Matrix([[xi**2, mu+nu], [mu-nu, alpha**2]])
 p_matrix_value = numpy.matrix(numpy.ones((2, 2)))
 p_matrix = Parameter(name="p_{matrix}", type="vector", value=p_matrix_value, real=True, nonnegative=False)
+p_matrix.symbolic.numeric_evaluation_module = "sympy"
 p_matrix.symbolic.expression = p_matrix_symbolic_expression
 print(p_matrix)
 #Test operations between parameters

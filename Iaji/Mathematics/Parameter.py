@@ -271,7 +271,7 @@ class ParameterSymbolic:
         - a list of expression symbols
     """
     # ----------------------------------------------------------
-    def __init__(self, name="x", type="scalar", real=False, nonnegative=False, expression=None):
+    def __init__(self, name="x", type="scalar", real=False, nonnegative=False, expression=None, numeric_evaluation_module="numpy"):
         """
         INPUTS
         ----------
@@ -280,6 +280,7 @@ class ParameterSymbolic:
             expression : sympy expression
                 Symbolic expression in terms of other symbols
         """
+        self.numeric_evaluation_module = numeric_evaluation_module
         self.type = type
         self.expression_changed = Signal()
         self.symbol = sympy.symbols(names=name, real=real, nonnegative=nonnegative)
@@ -377,7 +378,7 @@ class ParameterSymbolic:
                     sympy.symbols(names=name, real=s.is_real, nonnegative=s.is_nonnegative))
                 expression_non_latex = strutils.de_latexify(str(expression))
                 self.expression_lambda = sympy.lambdify(expression_symbols_non_latex_names,\
-                                                        expression_non_latex, modules="numpy")
+                                                        expression_non_latex, modules=self.numeric_evaluation_module)
             except AttributeError:
                 self.expression_lambda = None
             if self.type == "vector":
