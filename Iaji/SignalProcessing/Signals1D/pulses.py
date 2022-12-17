@@ -52,6 +52,7 @@ class Pulse(Parameter):
                 "%s is not a supported window type: \n %s"%(window_type, WINDOW_TYPES)
         #Window types
         x = self.symbolic.expression_symbols[0]
+        self.start, self.stop = (start, stop)
         if window_type == "rect":     
             self.window_shape = sympy.Piecewise((0, x<=start), \
                                                  (1, (x>start) & (x<=stop)), \
