@@ -1,21 +1,13 @@
 Metadata-Version: 2.1
 Name: Iaji
-Version: 0.1
-Summary: Utility packages of various types
-Home-page: 
-Download-URL: 
+Version: 0.0.0
+Summary: Utility packages of various types (mathematics, physics, instrument control, signal processing, GUI, ...)
+Home-page: UNKNOWN
 Author: Iyad Suleiman
-Author-email: isule@fysik.dtu.dk
-License: LGPLv3
-Platform: all
-Classifier: Development Status :: 1 - beta
-Classifier: Intended Audience :: Science/Research
-Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
-Classifier: Programming Language :: Python
-Classifier: Topic :: Scientific/Engineering
-Classifier: Topic :: Software Development :: Libraries
-Classifier: Topic :: System :: Hardware
-Classifier: Operating System :: Linux :: Ubuntu
+Author-email: jiedz@protonmail.com
+License: UNKNOWN
+Platform: UNKNOWN
 License-File: LICENSE
 
-Collection of instruments drivers for instruments available at qpit
+UNKNOWN
+
