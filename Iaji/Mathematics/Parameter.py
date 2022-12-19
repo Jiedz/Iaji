@@ -271,7 +271,7 @@ class ParameterSymbolic:
         - a list of expression symbols
     """
     # ----------------------------------------------------------
-    def __init__(self, name="x", type="scalar", real=False, nonnegative=False, expression=None, numeric_evaluation_module="numpy"):
+    def __init__(self, name="x", type="scalar", real=False, nonnegative=False, expression=None, numeric_evaluation_module:str="numpy"):
         """
         INPUTS
         ----------
@@ -285,6 +285,7 @@ class ParameterSymbolic:
         self.expression_changed = Signal()
         self.symbol = sympy.symbols(names=name, real=real, nonnegative=nonnegative)
         self._name = name
+        self.numeric_evaluation_module = numeric_evaluation_module
         if expression is not None:
             self.expression = expression
         else:
