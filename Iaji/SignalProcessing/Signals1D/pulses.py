@@ -113,7 +113,7 @@ class Pulse(Parameter):
             dt = 1/fs
             n_points = int(numpy.floor((x2-x1)/dt))
         x = numpy.linspace(x1, x2, n_points)
-        
+
         if self.symbolic.numeric_evaluation_module == "numpy":
             y = self.symbolic.expression_lambda(x)
         else:

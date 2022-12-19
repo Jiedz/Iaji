@@ -280,6 +280,7 @@ class ParameterSymbolic:
             expression : sympy expression
                 Symbolic expression in terms of other symbols
         """
+        self.numeric_evaluation_module = numeric_evaluation_module
         self.type = type
         self.expression_changed = Signal()
         self.symbol = sympy.symbols(names=name, real=real, nonnegative=nonnegative)
