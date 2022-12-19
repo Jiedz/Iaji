@@ -52,6 +52,7 @@ class Pulse(Parameter):
                 "%s is not a supported window type: \n %s"%(window_type, WINDOW_TYPES)
         #Window types
         x = self.symbolic.expression_symbols[0]
+        self.start, self.stop = (start, stop)
         if window_type == "rect":     
             self.window_shape = sympy.Piecewise((0, x<=start), \
                                                  (1, (x>start) & (x<=stop)), \
@@ -96,14 +97,18 @@ class Pulse(Parameter):
                                                      (final_level, x>stop-fall))
         self.symbolic.expression = self.peak_shape*self.window_shape
     #----------------------
-    def plot(self, x1, x2, n_points:int=1000, fs:float=None, axis=None, color="tab:purple"):
+    def plot(self, x1:float=None, x2:float=None, n_points:int=1000, fs:float=None, axis=None, color="tab:purple"):
         if axis is None:
-            axis = pyplot.figure().add_subplot(111)
+            axis = pyplot.figure().add_subplot(111)        
         axis.plot(*self.sample(x1, x2, n_points=n_points, fs=fs), marker=".", color=color)
         axis.grid(True)
         return axis
     #----------------------
-    def sample(self, x1, x2, n_points:int=1000, fs:float=None):
+    def sample(self, x1:float=None, x2:float=None, n_points:int=1000, fs:float=None):
+        if x1 is None:
+            x1 = self.start
+        if x2 is None:
+            x2 = self.stop
         if fs is not None:
             dt = 1/fs
             n_points = int(numpy.floor((x2-x1)/dt))
