@@ -111,6 +111,6 @@ class Pulse(Parameter):
         if self.symbolic.numeric_evaluation_module == "numpy":
             y = self.symbolic.expression_lambda(x)
         else:
-            y = [self.symbolic.expression_lambda(x0) for x0 in x]
-        return x, y   
+            y = numpy.array([float(self.symbolic.expression_lambda(x0)) for x0 in x])
+        return x, y
         
