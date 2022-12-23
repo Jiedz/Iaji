@@ -182,7 +182,7 @@ class correlator:
         if self.correlation_function is None: 
             self.computeCorrelationFunction()
             could_delete = True
-        self.delay =self.Xs*(numpy.argmax(self.correlation_function)-self.n_samples+1)
+        self.delay =self.Xs*(numpy.argmax(numpy.abs(self.correlation_function))-self.n_samples+1)
         #If the user wanXs to delete the correlation function, and if it was newly computed, then delete it
         if delete_correlation_function and could_delete:
             self.correlation_function, self.lags = [None for j in range(2)] 
