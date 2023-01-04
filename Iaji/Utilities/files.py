@@ -7,7 +7,7 @@ Created on Fri Apr 29 14:11:40 2022
 This module contains useful functions to deal with data loading and saving
 """
 # In[imports]
-from PyQt5.QtCore.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog
 import os
 # In[Loading data with a GUI]
 def select_directory(start_directory=None, title="Select directory"):
