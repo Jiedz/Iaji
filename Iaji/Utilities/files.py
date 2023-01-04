@@ -7,7 +7,7 @@ Created on Fri Apr 29 14:11:40 2022
 This module contains useful functions to deal with data loading and saving
 """
 # In[imports]
-import PyQt5
+from PyQt5.QtCore.QtWidgets import QFileDialog
 import os
 # In[Loading data with a GUI]
 def select_directory(start_directory=None, title="Select directory"):
@@ -21,7 +21,7 @@ def select_directory(start_directory=None, title="Select directory"):
         start_directory = os.getcwd()
     #Let the user choose a different data path, if needed.
     #--------------------------------
-    directory = PyQt5.QtWidgets.QFileDialog.getExistingDirectory(caption=title, directory=start_directory)
+    directory = QFileDialog.getExistingDirectory(caption=title, directory=start_directory)
     return directory
 #--------------------------------
 def select_file(start_directory=None, title="Select file"):
@@ -35,5 +35,5 @@ def select_file(start_directory=None, title="Select file"):
         start_directory = os.getcwd()
     #Let the user choose a different data path, if needed.
     #--------------------------------
-    file_path = PyQt5.QtWidgets.QFileDialog.getOpenFileName(caption=title, directory=start_directory)[0]
+    file_path = QFileDialog.getOpenFileName(caption=title, directory=start_directory)[0]
     return file_path
